@@ -665,3 +665,33 @@ header .navbar {
   color: green;
   size: 100vw;
 }
+.menu-more .buttons {
+  display: flex;
+  gap: 23px;
+}
+
+.menu-more .button {
+  padding: 10px 26px;
+  display: block;
+  border: 2px solid transparent;
+  /* border-radius: var(--border-radius-m); */
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  transition: 0.3s ease;
+  text-align: center;
+}
+.menu-more .button:hover, .menu-more .button.see-all {
+  color: orange;
+  border-color: orange;
+  background: green;
+  
+  
+}
+.menu-more .button.see-all:hover{
+  color: var(--primary-color);
+  background: var(--secondary-color);
+  border-color: var(--secondary-color);
+  visibility: visible;
+}
