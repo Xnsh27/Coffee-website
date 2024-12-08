@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sam Cafe - Checkout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6 relative">
+        <a href="menu.html" class="absolute top-6 left-6 cursor-pointer" aria-label="Home">
+            <img src="https://openui.fly.dev/openui/24x24.svg?text=🏠" aria-hidden="true" alt="Home">
+        </a>
+
+        <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-3xl font-bold mb-6 text-center">Checkout</h1>
+
+            <section class="mb-6">
+                <h2 class="text-2xl font-semibold mb-4">Selected Items</h2>
+                <div id="selected-items" class="space-y-4">
+                    <!-- Cart items will be dynamically added here -->
+                </div>
+            </section>
+
+            <section class="mb-6">
+                <h2 class="text-2xl font-semibold mb-4">Order Summary</h2>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="flex justify-between mb-2">
+                        <span>Subtotal</span>
+                        <span id="subtotal">₹0</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span>Tax (10%)</span>
+                        <span id="tax">₹0</span>
+                    </div>
+                    <div class="flex justify-between font-bold">
+                        <span>Total</span>
+                        <span id="total">₹0</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-6">
+                <h2 class="text-2xl font-semibold mb-4">Find Nearby Coffee Shops</h2>
+                
+                <div class="flex mb-4 space-x-4">
+                    <input type="text" id="location-search" placeholder="Enter your location" 
+                           class="flex-grow px-4 py-2 border rounded-lg">
+                    <button id="search-location" 
+                            class="px-4 py-2 bg-brown-600 text-white rounded-lg">
+                        Find Shops
+                    </button>
+                </div>
+
+                <div id="nearby-shops" class="space-y-4">
+                    <div class="bg-white rounded-xl shadow-lg p-4 flex justify-between items-center">
+                        <div class="flex-grow">
+                            <h3 class="font-bold">Café Sam</h3>
+                            <p class="text-sm text-gray-600"> shop 1,2 Sam Cafe Dombivli</p>
+                            <div class="flex items-center text-yellow-500">
+                                ★★★★☆ (4.2) • 0.5 km away
+                            </div>
+                        </div>
+                        <button class="px-4 py-2 bg-green-600 text-white rounded-lg">
+                            Select
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="w-full flex justify-center mt-6">
+                <button id="proceed-order" 
+                        class="px-6 py-3 bg-brown-600 text-white text-lg rounded-xl hover:bg-brown-700 transition duration-300">
+                    Confirm Order
+                </button>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectedItemsContainer = document.getElementById('selected-items');
+            const subtotalEl = document.getElementById('subtotal');
+            const taxEl = document.getElementById('tax');
+            const totalEl = document.getElementById('total');
+            const proceedOrderBtn = document.getElementById('proceed-order');
+
+            // Retrieve cart from local storage
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Render cart items
+            function renderCartItems() {
+                selectedItemsContainer.innerHTML = '';
+                let subtotal = 0;
+
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+
+                    const itemEl = document.createElement('div');
+                    itemEl.classList.add('flex', 'justify-between', 'items-center', 'bg-gray-100', 'p-4', 'rounded-lg');
+                    itemEl.innerHTML = `
+                        <div>
+                            <h3 class="font-bold">${item.name}</h3>
+                            <p>₹${item.price} x ${item.quantity}</p>
+                        </div>
+                        <span class="font-bold">₹${itemTotal}</span>
+                    `;
+                    selectedItemsContainer.appendChild(itemEl);
+                });
+
+                const tax = subtotal * 0.1;
+                const total = subtotal + tax;
+
+                subtotalEl.textContent = `₹${subtotal.toFixed(2)}`;
+                taxEl.textContent = `₹${tax.toFixed(2)}`;
+                totalEl.textContent = `₹${total.toFixed(2)}`;
+            }
+
+            // Confirm order functionality
+            proceedOrderBtn.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    alert('Your cart is empty!');
+                    return;
+                }
+
+                // Clear cart after order
+                localStorage.removeItem('cart');
+                alert('Order confirmed! Thank you for your purchase.');
+                window.location.href = 'menu.html';
+            });
+
+            // Initial render
+            renderCartItems();
+        });
+    </script>
+</body>
+</html>
